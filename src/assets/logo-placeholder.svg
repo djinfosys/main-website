@@ -1,0 +1,17 @@
+<svg width="328" height="72" viewBox="0 0 328 72" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">DJ Information Systems, Inc. placeholder logo</title>
+  <desc id="desc">A blue circuit-style hexagon mark beside the company name.</desc>
+  <path d="M36 4L63.713 20V52L36 68L8.287 52V20L36 4Z" fill="#0B3A75"/>
+  <path d="M36 12L56.785 24V48L36 60L15.215 48V24L36 12Z" fill="#F8FBFF" fill-opacity="0.95"/>
+  <path d="M26 36H46M26 36L20 30M26 36L20 42M46 36L52 30M46 36L52 42M36 24V48M36 24L30 18M36 24L42 18M36 48L30 54M36 48L42 54" stroke="#1B76D3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="20" cy="30" r="3" fill="#1B76D3"/>
+  <circle cx="20" cy="42" r="3" fill="#1B76D3"/>
+  <circle cx="52" cy="30" r="3" fill="#1B76D3"/>
+  <circle cx="52" cy="42" r="3" fill="#1B76D3"/>
+  <circle cx="30" cy="18" r="3" fill="#1B76D3"/>
+  <circle cx="42" cy="18" r="3" fill="#1B76D3"/>
+  <circle cx="30" cy="54" r="3" fill="#1B76D3"/>
+  <circle cx="42" cy="54" r="3" fill="#1B76D3"/>
+  <text x="84" y="32" fill="#082340" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800" letter-spacing="0">DJ Information</text>
+  <text x="84" y="54" fill="#31536F" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="0">Systems, Inc.</text>
+</svg>

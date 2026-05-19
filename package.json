@@ -1,0 +1,22 @@
+{
+  "name": "dj-information-systems-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "rollup": "npm:@rollup/wasm-node@^4.60.2",
+    "vite": "^7.3.2"
+  }
+}
