@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "preview": "vite preview --host 0.0.0.0",
+    "preview:e2e": "vite preview --host 127.0.0.1 --port 4173",
+    "pretest:e2e": "npm run build",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "lucide-react": "latest",
@@ -15,6 +19,8 @@
     "react-router-dom": "latest"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@playwright/test": "^1.60.0",
     "@vitejs/plugin-react": "^5.1.2",
     "rollup": "npm:@rollup/wasm-node@^4.60.2",
     "vite": "^7.3.2"
