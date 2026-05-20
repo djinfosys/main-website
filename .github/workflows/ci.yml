@@ -2,9 +2,12 @@ name: Website CI
 
 on:
   pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
+      - "site-*"
 
 permissions:
   contents: read
