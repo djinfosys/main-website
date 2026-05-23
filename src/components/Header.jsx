@@ -54,7 +54,12 @@ export default function Header() {
               {item.label}
             </NavLink>
           ))}
-          <a className="nav-link nav-link-external" href="https://djhostingsolutions.com">
+          <a
+            className="nav-link nav-link-external"
+            href="https://djhostingsolutions.com"
+            target="_blank"
+            rel="noreferrer"
+          >
             DJ Hosting Solutions
           </a>
           <Link className="button button-small button-primary" to="/contact-pricing" onClick={closeMenu}>

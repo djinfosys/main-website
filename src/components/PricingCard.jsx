@@ -9,6 +9,8 @@ export default function PricingCard({
   ctaLabel = 'Request Scope Review',
   ctaHref = '#contact-form',
 }) {
+  const isExternalLink = /^https?:\/\//.test(ctaHref);
+
   return (
     <article className={`pricing-card ${featured ? 'featured' : ''}`}>
       {featured && <span className="pricing-ribbon">Most flexible</span>}
@@ -25,7 +27,12 @@ export default function PricingCard({
           </li>
         ))}
       </ul>
-      <a className={featured ? 'button button-primary' : 'button button-secondary'} href={ctaHref}>
+      <a
+        className={featured ? 'button button-primary' : 'button button-secondary'}
+        href={ctaHref}
+        target={isExternalLink ? '_blank' : undefined}
+        rel={isExternalLink ? 'noreferrer' : undefined}
+      >
         {ctaLabel}
       </a>
     </article>

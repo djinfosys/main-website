@@ -556,6 +556,71 @@ p {
   margin-top: 14px;
 }
 
+.proof-section {
+  background:
+    linear-gradient(135deg, rgba(11, 92, 173, 0.08), transparent 38%),
+    var(--gray-75);
+}
+
+.proof-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  gap: 34px;
+  align-items: start;
+}
+
+.proof-copy {
+  position: sticky;
+  top: 112px;
+}
+
+.proof-copy h2 {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.proof-card {
+  min-height: 244px;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+  box-shadow: var(--shadow-soft);
+}
+
+.proof-card svg {
+  color: var(--blue-700);
+}
+
+.proof-card h3 {
+  margin-bottom: 0;
+  color: var(--navy-950);
+  font-size: 1.05rem;
+}
+
+.proof-card p {
+  margin-bottom: 0;
+  color: var(--steel-700);
+  font-size: 0.94rem;
+}
+
+.proof-card a {
+  align-self: end;
+  color: var(--blue-700);
+  font-size: 0.92rem;
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .service-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1401,6 +1466,14 @@ p {
   margin-top: 28px;
 }
 
+.form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .contact-form label {
   display: grid;
   gap: 8px;
@@ -1455,6 +1528,37 @@ p {
 .form-disclosure a {
   color: var(--blue-700);
   font-weight: 850;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form-status {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  font-size: 0.94rem;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.form-status.info {
+  border: 1px solid #b9d7ee;
+  background: #edf7ff;
+  color: var(--navy-900);
+}
+
+.form-status.success {
+  border: 1px solid #add5c3;
+  background: #eefaf4;
+  color: #124d31;
+}
+
+.form-status.error {
+  border: 1px solid #ecc4bf;
+  background: #fff2f0;
+  color: #7b2118;
+}
+
+.form-status a {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -1587,6 +1691,7 @@ p {
   .feature-panel,
   .readiness-panel,
   .logo-showcase-heading,
+  .proof-panel,
   .capability-summary-grid,
   .next-steps-panel,
   .contact-grid {
@@ -1627,6 +1732,10 @@ p {
   }
 
   .contact-card {
+    position: static;
+  }
+
+  .proof-copy {
     position: static;
   }
 
@@ -1739,6 +1848,7 @@ p {
     .service-detail-grid,
     .check-grid,
     .experience-logo-strip,
+    .proof-grid,
   .experience-grid,
     .specialization-list,
     .audience-grid,

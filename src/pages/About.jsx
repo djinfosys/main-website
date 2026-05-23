@@ -278,7 +278,7 @@ export default function About() {
               hosting, server administration, Docker deployments, virtualization, and infrastructure support.
             </p>
           </div>
-          <a className="button button-light" href="https://djhostingsolutions.com">
+          <a className="button button-light" href="https://djhostingsolutions.com" target="_blank" rel="noreferrer">
             Open DJ Hosting Solutions
           </a>
         </div>

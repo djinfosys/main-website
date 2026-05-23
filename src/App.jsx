@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import Analytics from './components/Analytics.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import Home from './pages/Home.jsx';
 import About from './pages/About.jsx';
@@ -16,6 +17,7 @@ function App() {
   return (
     <div className="site-shell">
       <ScrollToTop />
+      <Analytics />
       <Header />
       <main id="main-content">
         <Routes>
