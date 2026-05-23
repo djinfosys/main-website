@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+const CANONICAL_ORIGIN = 'https://djinfosys.com';
+
 function setMeta(name, content, attribute = 'name') {
   let element = document.querySelector(`meta[${attribute}="${name}"]`);
 
@@ -24,15 +26,22 @@ function setCanonical(href) {
   element.setAttribute('href', href);
 }
 
+function getCanonicalUrl() {
+  const path = window.location.pathname === '/' ? '/' : window.location.pathname.replace(/\/$/, '');
+  return `${CANONICAL_ORIGIN}${path}`;
+}
+
 export default function SEO({ title, description, noIndex = false }) {
   useEffect(() => {
+    const canonicalUrl = getCanonicalUrl();
+
     document.title = title;
     setMeta('description', description);
     setMeta('og:title', title, 'property');
     setMeta('og:description', description, 'property');
-    setMeta('og:url', window.location.href, 'property');
+    setMeta('og:url', canonicalUrl, 'property');
     setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
-    setCanonical(window.location.href.split('#')[0]);
+    setCanonical(canonicalUrl);
   }, [title, description, noIndex]);
 
   return null;
