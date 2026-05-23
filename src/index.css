@@ -154,6 +154,11 @@ main {
   gap: 8px;
 }
 
+.primary-nav .button {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
 .nav-link {
   min-height: 42px;
   display: inline-flex;
