@@ -16,6 +16,7 @@ import SEO from '../components/SEO.jsx';
 
 const serviceGroups = [
   {
+    id: 'microsoft-365',
     icon: Blocks,
     title: 'Microsoft 365, Power Platform, and SharePoint',
     summary:
@@ -29,6 +30,7 @@ const serviceGroups = [
     bestFor: 'Teams with spreadsheet-heavy processes, aging SharePoint sites, manual approvals, or disconnected Microsoft 365 usage.',
   },
   {
+    id: 'custom-software',
     icon: Code2,
     title: 'Custom Software, .NET Applications, and APIs',
     summary:
@@ -42,6 +44,7 @@ const serviceGroups = [
     bestFor: 'Organizations that need a purpose-built application instead of forcing a workflow into a generic tool.',
   },
   {
+    id: 'workflow-automation',
     icon: Workflow,
     title: 'Workflow Automation and Operational Modernization',
     summary:
@@ -55,6 +58,7 @@ const serviceGroups = [
     bestFor: 'Business, nonprofit, government, and enterprise teams that know the pain points but need a practical technical path.',
   },
   {
+    id: 'hosting-infrastructure',
     icon: ServerCog,
     title: 'Hosting, VPS, Infrastructure, and DevOps Support',
     summary:
@@ -132,7 +136,7 @@ export default function Services() {
 
         <div className="container service-detail-grid">
           {serviceGroups.map((service) => (
-            <article className="service-detail-card" key={service.title}>
+            <article className="service-detail-card" id={service.id} key={service.title}>
               <div className="icon-badge" aria-hidden="true">
                 <service.icon size={24} />
               </div>
