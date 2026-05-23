@@ -36,7 +36,9 @@ export default function Footer() {
               <Link to="/capabilities">Capabilities</Link>
             </li>
             <li>
-              <a href="/documents/dj-information-systems-capability-statement.pdf">Capability Statement PDF</a>
+              <a href="/documents/dj-information-systems-capability-statement.pdf" target="_blank" rel="noreferrer">
+                Capability Statement PDF
+              </a>
             </li>
             <li>
               <Link to="/contact-pricing">Contact</Link>
@@ -85,7 +87,9 @@ export default function Footer() {
             </li>
             <li>
               <Server size={17} aria-hidden="true" />
-              <a href="https://djhostingsolutions.com">DJ Hosting Solutions</a>
+              <a href="https://djhostingsolutions.com" target="_blank" rel="noreferrer">
+                DJ Hosting Solutions
+              </a>
             </li>
           </ul>
         </div>

@@ -162,6 +162,34 @@ test.describe('core navigation behavior', () => {
     await expect(page).toHaveURL(/\/services#custom-software$/);
     await expect(page.locator('#custom-software')).toBeInViewport();
   });
+
+  test('project brief form posts and shows a success message', async ({ page }) => {
+    await page.route('**/*', async (route) => {
+      if (route.request().url().endsWith('/test-contact-submit')) {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: true }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/contact-pricing#contact-form', { waitUntil: 'networkidle' });
+
+    await page.getByLabel('Name').fill('Test Visitor');
+    await page.getByLabel('Email').fill('test@example.com');
+    await page.getByLabel('Organization Type').selectOption('Small Business');
+    await page.getByLabel('Service Needed').selectOption('Custom Software / Automation');
+    await page.getByLabel('Timeline').selectOption('30-60 days');
+    await page.getByLabel('Estimated Budget Range').selectOption('$5,000-$15,000');
+    await page.getByLabel('Message').fill('Testing the production contact form flow.');
+    await page.getByRole('button', { name: /send project brief/i }).click();
+
+    await expect(page.getByRole('status')).toContainText(/project brief was sent/i);
+  });
 });
 
 test.describe('accessibility smoke tests', () => {

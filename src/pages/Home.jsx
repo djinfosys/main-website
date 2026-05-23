@@ -6,6 +6,7 @@ import {
   Cloud,
   Code2,
   Database,
+  FileText,
   FileCode2,
   GitBranch,
   Network,
@@ -99,6 +100,8 @@ const representativeLogos = [
     label: 'United Global Technologies',
   },
 ];
+
+const capabilityStatementUrl = '/documents/dj-information-systems-capability-statement.pdf';
 
 export default function Home() {
   return (
@@ -212,6 +215,41 @@ export default function Home() {
           Logos represent project experience and do not imply endorsement or a direct contractual relationship with DJ
           Information Systems, Inc.
         </p>
+      </section>
+
+      <section className="section proof-section">
+        <div className="container proof-panel">
+          <div className="proof-copy">
+            <p className="eyebrow">Proof and procurement packet</p>
+            <h2>Capability, experience, and vendor details are easy to review.</h2>
+            <p>
+              Serious buyers should not have to hunt for basic credibility signals. Use this section to review the
+              capability statement, representative project experience, and public-sector identifiers in one path.
+            </p>
+          </div>
+          <div className="proof-grid">
+            <article className="proof-card">
+              <FileText size={25} aria-hidden="true" />
+              <h3>Capability statement</h3>
+              <p>Download the one-page procurement profile with NAICS alignment, core competencies, and contact details.</p>
+              <a href={capabilityStatementUrl} target="_blank" rel="noreferrer">
+                Download PDF
+              </a>
+            </article>
+            <article className="proof-card">
+              <Building2 size={25} aria-hidden="true" />
+              <h3>Registered vendor details</h3>
+              <p>Review UEI, CAGE / NCAGE, NAICS codes, and public-sector readiness details for qualification review.</p>
+              <Link to="/capabilities">View Capabilities</Link>
+            </article>
+            <article className="proof-card">
+              <BadgeCheck size={25} aria-hidden="true" />
+              <h3>Representative experience</h3>
+              <p>See delivery context connected to federal health, state education, and public-sector environments.</p>
+              <Link to="/experience">View Experience</Link>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section className="section">
@@ -338,7 +376,7 @@ export default function Home() {
               of the DJ Information Systems service family.
             </p>
           </div>
-          <a className="button button-light" href="https://djhostingsolutions.com">
+          <a className="button button-light" href="https://djhostingsolutions.com" target="_blank" rel="noreferrer">
             Visit DJ Hosting Solutions
             <ArrowRight size={18} aria-hidden="true" />
           </a>

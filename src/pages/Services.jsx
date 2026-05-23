@@ -117,7 +117,12 @@ export default function Services() {
               Request Scope Review
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <a className="button button-ghost-light" href="https://djhostingsolutions.com">
+            <a
+              className="button button-ghost-light"
+              href="https://djhostingsolutions.com"
+              target="_blank"
+              rel="noreferrer"
+            >
               Hosting Services
             </a>
           </div>

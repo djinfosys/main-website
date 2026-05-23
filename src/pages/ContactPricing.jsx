@@ -1,8 +1,14 @@
+import { useState } from 'react';
 import { BadgeCheck, BriefcaseBusiness, Mail, Phone, Send, ServerCog } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { trackConversion } from '../components/Analytics.jsx';
 import CTASection from '../components/CTASection.jsx';
 import PricingCard from '../components/PricingCard.jsx';
 import SEO from '../components/SEO.jsx';
+
+const projectInquiryEmail = 'projects@djinfosys.com';
+const contactFormEndpoint =
+  import.meta.env.VITE_CONTACT_FORM_ENDPOINT || `https://formsubmit.co/ajax/${projectInquiryEmail}`;
 
 const packages = [
   {
@@ -82,10 +88,25 @@ const trustPoints = [
 ];
 
 export default function ContactPricing() {
-  const handleProjectBriefSubmit = (event) => {
+  const [formStatus, setFormStatus] = useState({ type: 'idle', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleProjectBriefSubmit = async (event) => {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const botTrap = formData.get('Website');
+
+    if (botTrap) {
+      form.reset();
+      setFormStatus({
+        type: 'success',
+        message: 'Thanks. Your project brief has been received.',
+      });
+      return;
+    }
+
     const name = formData.get('Name') || '';
     const email = formData.get('Email') || '';
     const company = formData.get('Company') || 'Not provided';
@@ -95,22 +116,62 @@ export default function ContactPricing() {
     const budget = formData.get('Estimated Budget Range') || 'Not specified';
     const currentPlatforms = formData.get('Current Platforms / Tools') || 'Not provided';
     const message = formData.get('Message') || '';
-    const subject = `Project inquiry from ${name}`;
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Company: ${company}`,
-      `Organization type: ${organizationType}`,
-      `Service needed: ${service}`,
-      `Timeline: ${timeline}`,
-      `Estimated budget range: ${budget}`,
-      `Current platforms / tools: ${currentPlatforms}`,
-      '',
-      'Project details:',
+    const payload = {
+      _subject: `Project inquiry from ${name || 'website visitor'}`,
+      _template: 'table',
+      _captcha: 'false',
+      _replyto: email,
+      name,
+      email,
+      company,
+      organizationType,
+      service,
+      timeline,
+      budget,
+      currentPlatforms,
       message,
-    ].join('\n');
+      source: window.location.href,
+    };
 
-    window.location.href = `mailto:projects@djinfosys.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setIsSubmitting(true);
+    setFormStatus({
+      type: 'info',
+      message: 'Sending your project brief...',
+    });
+
+    try {
+      const response = await fetch(contactFormEndpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Form submission failed with status ${response.status}`);
+      }
+
+      form.reset();
+      trackConversion('generate_lead', {
+        form_name: 'project_brief',
+        service,
+      });
+      setFormStatus({
+        type: 'success',
+        message:
+          'Your project brief was sent. DJ Information Systems will review the request and follow up if the work is a fit.',
+      });
+    } catch {
+      setFormStatus({
+        type: 'error',
+        message:
+          'The form could not send just now. Please email projects@djinfosys.com directly, or try again in a few minutes.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -174,8 +235,8 @@ export default function ContactPricing() {
             <p className="eyebrow">Start a conversation</p>
             <h2>Tell us what you need to build, modernize, automate, or deploy.</h2>
             <p>
-              Share the current goal, timeline, systems involved, and known constraints. The project brief will open in your
-              email app so you can review it before sending.
+              Share the current goal, timeline, systems involved, and known constraints. The form sends the brief directly
+              for review and includes basic spam protection.
             </p>
             <div className="contact-trust-panel" aria-label="Project review trust points">
               {trustPoints.map((point) => (
@@ -189,6 +250,10 @@ export default function ContactPricing() {
               className="contact-form"
               onSubmit={handleProjectBriefSubmit}
             >
+              <label className="form-honeypot" aria-hidden="true">
+                Website
+                <input type="text" name="Website" tabIndex="-1" autoComplete="off" />
+              </label>
               <label>
                 Name
                 <input type="text" name="Name" autoComplete="name" required />
@@ -275,13 +340,24 @@ export default function ContactPricing() {
                 ></textarea>
               </label>
               <p className="form-disclosure form-wide">
-                By preparing a project brief, you can review the message in your email app before sending. Website inquiry
-                information is handled according to our <Link to="/privacy">Privacy Policy</Link> and{' '}
+                Project briefs are sent to DJ Information Systems for review. Website inquiry information is handled
+                according to our <Link to="/privacy">Privacy Policy</Link> and{' '}
                 <Link to="/terms">Terms of Service</Link>.
               </p>
-              <button className="button button-primary form-wide" type="submit">
+              {formStatus.message && (
+                <div className={`form-status ${formStatus.type} form-wide`} role="status" aria-live="polite">
+                  {formStatus.message}
+                  {formStatus.type === 'error' && (
+                    <>
+                      {' '}
+                      <a href={`mailto:${projectInquiryEmail}`}>{projectInquiryEmail}</a>
+                    </>
+                  )}
+                </div>
+              )}
+              <button className="button button-primary form-wide" type="submit" disabled={isSubmitting}>
                 <Send size={18} aria-hidden="true" />
-                Prepare Project Brief
+                {isSubmitting ? 'Sending Project Brief' : 'Send Project Brief'}
               </button>
             </form>
           </div>
@@ -317,7 +393,9 @@ export default function ContactPricing() {
               <ServerCog size={25} aria-hidden="true" />
               <h3>DJ Hosting Solutions</h3>
               <p>For monthly hosting plans, VPS accounts, and managed website hosting:</p>
-              <a href="https://djhostingsolutions.com">Visit djhostingsolutions.com</a>
+              <a href="https://djhostingsolutions.com" target="_blank" rel="noreferrer">
+                Visit djhostingsolutions.com
+              </a>
               <a href="mailto:support@djhostingsolutions.com">support@djhostingsolutions.com</a>
             </div>
           </aside>
