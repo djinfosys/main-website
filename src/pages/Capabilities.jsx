@@ -19,6 +19,8 @@ const identifiers = [
   { label: 'CAGE / NCAGE', value: '198F7' },
 ];
 
+const capabilityStatementUrl = '/documents/dj-information-systems-capability-statement.pdf';
+
 const naicsCodes = [
   {
     priority: 'Primary',
@@ -118,9 +120,9 @@ export default function Capabilities() {
             <Link className="button button-light" to="/contact-pricing">
               Request Capability Discussion
             </Link>
-            <Link className="button button-ghost-light" to="/services">
-              Review Services
-            </Link>
+            <a className="button button-ghost-light" href={capabilityStatementUrl} target="_blank" rel="noreferrer">
+              Download Capability Statement
+            </a>
           </div>
         </div>
       </section>
@@ -221,12 +223,12 @@ export default function Capabilities() {
             <FileText size={34} aria-hidden="true" />
             <h2>Capability Statement</h2>
             <p>
-              A formal capability statement can be prepared or shared for opportunities that require a concise procurement
-              profile, NAICS alignment, past-performance context, and contact details.
+              Download the formal one-page capability statement for procurement reviews, teaming conversations, NAICS
+              alignment, representative experience context, and contact details.
             </p>
-            <Link className="button button-light" to="/contact-pricing">
-              Request Details
-            </Link>
+            <a className="button button-light" href={capabilityStatementUrl} target="_blank" rel="noreferrer">
+              Download PDF
+            </a>
           </aside>
         </div>
       </section>

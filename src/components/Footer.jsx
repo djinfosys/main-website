@@ -36,6 +36,9 @@ export default function Footer() {
               <Link to="/capabilities">Capabilities</Link>
             </li>
             <li>
+              <a href="/documents/dj-information-systems-capability-statement.pdf">Capability Statement PDF</a>
+            </li>
+            <li>
               <Link to="/contact-pricing">Contact</Link>
             </li>
             <li>

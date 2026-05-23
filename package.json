@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "generate:capabilities-pdf": "node scripts/generate-capabilities-pdf.mjs",
     "preview": "vite preview --host 0.0.0.0",
     "preview:e2e": "vite preview --host 127.0.0.1 --port 4173",
     "pretest:e2e": "npm run build",

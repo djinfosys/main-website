@@ -38,6 +38,7 @@ const routes = [
 
 const watchedResourceTypes = new Set(['script', 'stylesheet', 'image', 'font']);
 const canonicalOrigin = 'https://djinfosys.com';
+const capabilityStatementPath = '/documents/dj-information-systems-capability-statement.pdf';
 
 function expectedCanonicalUrl(path) {
   const cleanPath = path.split(/[?#]/)[0];
@@ -132,6 +133,22 @@ test.describe('core navigation behavior', () => {
     await expect(page).toHaveURL(/\/contact-pricing#contact-form$/);
     await expect(page.locator('#contact-form')).toBeVisible();
     await expect(page.locator('#contact-form')).toBeInViewport();
+  });
+
+  test('capability statement PDF is linked and served', async ({ page, request }) => {
+    await page.goto('/capabilities', { waitUntil: 'networkidle' });
+
+    await expect(page.getByRole('link', { name: /download capability statement/i })).toHaveAttribute(
+      'href',
+      capabilityStatementPath,
+    );
+
+    const response = await request.get(capabilityStatementPath);
+    const body = await response.body();
+
+    expect(response.ok()).toBe(true);
+    expect(response.headers()['content-type']).toContain('application/pdf');
+    expect(body.length).toBeGreaterThan(10000);
   });
 });
 
