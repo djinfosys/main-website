@@ -37,6 +37,13 @@ const routes = [
 ];
 
 const watchedResourceTypes = new Set(['script', 'stylesheet', 'image', 'font']);
+const canonicalOrigin = 'https://djinfosys.com';
+
+function expectedCanonicalUrl(path) {
+  const cleanPath = path.split(/[?#]/)[0];
+  const normalizedPath = cleanPath === '/' ? '/' : cleanPath.replace(/\/$/, '');
+  return `${canonicalOrigin}${normalizedPath}`;
+}
 
 function watchForProductionBreaks(page) {
   const problems = [];
@@ -84,6 +91,8 @@ test.describe('production route smoke tests', () => {
       await expect(page.locator('#main-content')).toBeVisible();
       await expect(page.getByRole('heading', { level: 1, name: route.heading })).toBeVisible();
       await expect(page.locator('body')).not.toBeEmpty();
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', expectedCanonicalUrl(route.path));
+      await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', expectedCanonicalUrl(route.path));
 
       expect(problems).toEqual([]);
     });
@@ -91,6 +100,14 @@ test.describe('production route smoke tests', () => {
 });
 
 test.describe('core navigation behavior', () => {
+  test('canonical URL uses the apex domain and ignores tracking details', async ({ page }) => {
+    await page.goto('/services?utm_source=qa#services', { waitUntil: 'networkidle' });
+
+    await expect(page.getByRole('heading', { level: 1, name: /Focused technology services/i })).toBeVisible();
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://djinfosys.com/services');
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', 'https://djinfosys.com/services');
+  });
+
   test('mobile menu opens and navigates to services', async ({ page }) => {
     const problems = watchForProductionBreaks(page);
 
