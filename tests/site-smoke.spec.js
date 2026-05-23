@@ -150,6 +150,18 @@ test.describe('core navigation behavior', () => {
     expect(response.headers()['content-type']).toContain('application/pdf');
     expect(body.length).toBeGreaterThan(10000);
   });
+
+  test('footer service links navigate to specific service sections', async ({ page }) => {
+    await page.goto('/capabilities', { waitUntil: 'networkidle' });
+
+    await page
+      .getByRole('contentinfo')
+      .getByRole('link', { name: 'Custom software and APIs' })
+      .click();
+
+    await expect(page).toHaveURL(/\/services#custom-software$/);
+    await expect(page.locator('#custom-software')).toBeInViewport();
+  });
 });
 
 test.describe('accessibility smoke tests', () => {

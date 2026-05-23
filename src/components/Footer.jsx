@@ -54,16 +54,16 @@ export default function Footer() {
           <h2>Services</h2>
           <ul>
             <li>
-              <Link to="/services">Microsoft 365 consulting</Link>
+              <Link to="/services#microsoft-365">Microsoft 365 consulting</Link>
             </li>
             <li>
-              <Link to="/services">Power Platform development</Link>
+              <Link to="/services#microsoft-365">Power Platform development</Link>
             </li>
             <li>
-              <Link to="/services">Custom software and APIs</Link>
+              <Link to="/services#custom-software">Custom software and APIs</Link>
             </li>
             <li>
-              <Link to="/services">Hosting and infrastructure</Link>
+              <Link to="/services#hosting-infrastructure">Hosting and infrastructure</Link>
             </li>
           </ul>
         </div>

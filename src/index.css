@@ -622,6 +622,7 @@ p {
   display: grid;
   gap: 20px;
   padding: 26px;
+  scroll-margin-top: 96px;
 }
 
 .service-detail-card h2 {
