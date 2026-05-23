@@ -6,9 +6,12 @@ import CTASection from '../components/CTASection.jsx';
 import PricingCard from '../components/PricingCard.jsx';
 import SEO from '../components/SEO.jsx';
 
-const projectInquiryEmail = 'projects@djinfosys.com';
 const contactFormEndpoint =
-  import.meta.env.VITE_CONTACT_FORM_ENDPOINT || `https://formsubmit.co/ajax/${projectInquiryEmail}`;
+  import.meta.env.VITE_CONTACT_FORM_ENDPOINT?.startsWith('http')
+    ? import.meta.env.VITE_CONTACT_FORM_ENDPOINT
+    : `https://formsubmit.co/ajax/${
+        import.meta.env.VITE_CONTACT_FORM_ENDPOINT || 'ac28304433fc3e25ad50118170950afe'
+      }`;
 
 const packages = [
   {
