@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { readFile } from 'node:fs/promises';
 
 const routes = [
   {
@@ -203,4 +204,34 @@ test.describe('accessibility smoke tests', () => {
       expect(seriousViolations, JSON.stringify(summarizeAccessibilityViolations(seriousViolations), null, 2)).toEqual([]);
     });
   }
+});
+
+test.describe('production nginx config', () => {
+  let nginxConfig;
+
+  test.beforeAll(async () => {
+    nginxConfig = await readFile(new URL('../nginx.conf', import.meta.url), 'utf8');
+  });
+
+  test('sets core production security headers', async () => {
+    for (const header of [
+      'Strict-Transport-Security',
+      'Content-Security-Policy',
+      'Permissions-Policy',
+      'X-Frame-Options',
+      'X-Content-Type-Options',
+      'Referrer-Policy',
+    ]) {
+      expect(nginxConfig).toContain(header);
+    }
+
+    expect(nginxConfig).toContain("connect-src 'self' https://formsubmit.co");
+    expect(nginxConfig).toContain("form-action 'self' https://formsubmit.co");
+  });
+
+  test('serves only known app routes through React and returns 404 for unknown paths', async () => {
+    expect(nginxConfig).toContain('location ~ ^/(about|experience|services|capabilities|contact-pricing|privacy|terms)/?$');
+    expect(nginxConfig).toContain('error_page 404 /index.html');
+    expect(nginxConfig).toContain('return 404');
+  });
 });
