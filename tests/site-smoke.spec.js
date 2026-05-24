@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { readFile } from 'node:fs/promises';
+import { DEFAULT_SOCIAL_IMAGE, canonicalUrlForPath, routeMetadata } from '../src/siteMetadata.js';
 
 const routes = [
   {
@@ -81,6 +82,14 @@ function summarizeAccessibilityViolations(violations) {
     help: violation.help,
     targets: violation.nodes.map((node) => node.target.join(' ')),
   }));
+}
+
+function escapeHtml(value) {
+  return value
+    .replaceAll('&', '&amp;')
+    .replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
 }
 
 test.describe('production route smoke tests', () => {
@@ -230,8 +239,36 @@ test.describe('production nginx config', () => {
   });
 
   test('serves only known app routes through React and returns 404 for unknown paths', async () => {
-    expect(nginxConfig).toContain('location ~ ^/(about|experience|services|capabilities|contact-pricing|privacy|terms)/?$');
+    expect(nginxConfig).toContain(
+      'location ~ ^/(?<app_route>about|experience|services|capabilities|contact-pricing|privacy|terms)/?$',
+    );
+    expect(nginxConfig).toContain('try_files /$app_route/index.html /index.html =404');
     expect(nginxConfig).toContain('error_page 404 /index.html');
     expect(nginxConfig).toContain('return 404');
+  });
+});
+
+test.describe('static route social metadata', () => {
+  test('build generates route-specific HTML for social crawlers', async () => {
+    for (const route of routeMetadata) {
+      const htmlPath =
+        route.path === '/'
+          ? new URL('../dist/index.html', import.meta.url)
+          : new URL(`../dist${route.path}/index.html`, import.meta.url);
+      const html = await readFile(htmlPath, 'utf8');
+      const canonicalUrl = canonicalUrlForPath(route.path);
+      const title = escapeHtml(route.title);
+      const description = escapeHtml(route.description);
+
+      expect(html).toContain(`<title>${title}</title>`);
+      expect(html).toContain(`<meta name="description" content="${description}" />`);
+      expect(html).toContain(`<link rel="canonical" href="${canonicalUrl}" />`);
+      expect(html).toContain(`<meta property="og:title" content="${title}" />`);
+      expect(html).toContain(`<meta property="og:description" content="${description}" />`);
+      expect(html).toContain(`<meta property="og:url" content="${canonicalUrl}" />`);
+      expect(html).toContain(`<meta property="og:image" content="${DEFAULT_SOCIAL_IMAGE}" />`);
+      expect(html).toContain(`<meta name="twitter:card" content="summary_large_image" />`);
+      expect(html).toContain(`<meta name="twitter:title" content="${title}" />`);
+    }
   });
 });

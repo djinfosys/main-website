@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
-
-const CANONICAL_ORIGIN = 'https://djinfosys.com';
+import {
+  DEFAULT_SOCIAL_IMAGE,
+  DEFAULT_SOCIAL_IMAGE_ALT,
+  SITE_NAME,
+  canonicalUrlForPath,
+} from '../siteMetadata.js';
 
 function setMeta(name, content, attribute = 'name') {
   let element = document.querySelector(`meta[${attribute}="${name}"]`);
@@ -26,21 +30,24 @@ function setCanonical(href) {
   element.setAttribute('href', href);
 }
 
-function getCanonicalUrl() {
-  const path = window.location.pathname === '/' ? '/' : window.location.pathname.replace(/\/$/, '');
-  return `${CANONICAL_ORIGIN}${path}`;
-}
-
 export default function SEO({ title, description, noIndex = false }) {
   useEffect(() => {
-    const canonicalUrl = getCanonicalUrl();
+    const canonicalUrl = canonicalUrlForPath(window.location.pathname);
 
     document.title = title;
     setMeta('description', description);
+    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
     setMeta('og:title', title, 'property');
     setMeta('og:description', description, 'property');
     setMeta('og:url', canonicalUrl, 'property');
-    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
+    setMeta('og:type', 'website', 'property');
+    setMeta('og:site_name', SITE_NAME, 'property');
+    setMeta('og:image', DEFAULT_SOCIAL_IMAGE, 'property');
+    setMeta('og:image:alt', DEFAULT_SOCIAL_IMAGE_ALT, 'property');
+    setMeta('twitter:card', 'summary_large_image');
+    setMeta('twitter:title', title);
+    setMeta('twitter:description', description);
+    setMeta('twitter:image', DEFAULT_SOCIAL_IMAGE);
     setCanonical(canonicalUrl);
   }, [title, description, noIndex]);
 
