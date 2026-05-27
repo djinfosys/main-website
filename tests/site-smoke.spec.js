@@ -243,6 +243,7 @@ test.describe('production nginx config', () => {
       'location ~ ^/(?<app_route>about|experience|services|capabilities|contact-pricing|privacy|terms)/?$',
     );
     expect(nginxConfig).toContain('try_files /$app_route/index.html /index.html =404');
+    expect(nginxConfig).toContain('location = /dj-information-systems-social.png');
     expect(nginxConfig).toContain('error_page 404 /index.html');
     expect(nginxConfig).toContain('return 404');
   });
