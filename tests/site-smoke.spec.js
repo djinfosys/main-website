@@ -92,6 +92,16 @@ function escapeHtml(value) {
     .replaceAll('>', '&gt;');
 }
 
+async function fillProjectBriefForm(page) {
+  await page.getByLabel('Name').fill('Test Visitor');
+  await page.getByLabel('Email').fill('test@example.com');
+  await page.getByLabel('Organization Type').selectOption('Small Business');
+  await page.getByLabel('Service Needed').selectOption('Custom Software / Automation');
+  await page.getByLabel('Timeline').selectOption('30-60 days');
+  await page.getByLabel('Estimated Budget Range').selectOption('$5,000-$15,000');
+  await page.getByLabel('Message').fill('Testing the production contact form flow.');
+}
+
 test.describe('production route smoke tests', () => {
   for (const route of routes) {
     test(`loads ${route.path} without blank screen or asset failures`, async ({ page }) => {
@@ -189,16 +199,46 @@ test.describe('core navigation behavior', () => {
 
     await page.goto('/contact-pricing#contact-form', { waitUntil: 'networkidle' });
 
-    await page.getByLabel('Name').fill('Test Visitor');
-    await page.getByLabel('Email').fill('test@example.com');
-    await page.getByLabel('Organization Type').selectOption('Small Business');
-    await page.getByLabel('Service Needed').selectOption('Custom Software / Automation');
-    await page.getByLabel('Timeline').selectOption('30-60 days');
-    await page.getByLabel('Estimated Budget Range').selectOption('$5,000-$15,000');
-    await page.getByLabel('Message').fill('Testing the production contact form flow.');
+    await fillProjectBriefForm(page);
     await page.getByRole('button', { name: /send project brief/i }).click();
 
     await expect(page.getByRole('status')).toContainText(/project brief was sent/i);
+  });
+
+  test('project brief form recovers cleanly when the submit endpoint fails', async ({ page }) => {
+    const pageErrors = [];
+
+    page.on('pageerror', (error) => {
+      pageErrors.push(error.message);
+    });
+
+    await page.route('**/*', async (route) => {
+      if (route.request().url().endsWith('/test-contact-submit')) {
+        await route.fulfill({
+          status: 500,
+          contentType: 'application/json',
+          body: JSON.stringify({ success: false }),
+        });
+        return;
+      }
+
+      await route.continue();
+    });
+
+    await page.goto('/contact-pricing#contact-form', { waitUntil: 'networkidle' });
+
+    await fillProjectBriefForm(page);
+    await page.getByRole('button', { name: /send project brief/i }).click();
+
+    const status = page.getByRole('status');
+
+    await expect(status).toContainText(/form could not send/i);
+    await expect(status.getByRole('link', { name: 'projects@djinfosys.com' })).toHaveAttribute(
+      'href',
+      'mailto:projects@djinfosys.com',
+    );
+    await expect(page.getByRole('button', { name: /send project brief/i })).toBeEnabled();
+    expect(pageErrors).toEqual([]);
   });
 });
 
