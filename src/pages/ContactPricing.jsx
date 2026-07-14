@@ -6,6 +6,8 @@ import CTASection from '../components/CTASection.jsx';
 import PricingCard from '../components/PricingCard.jsx';
 import SEO from '../components/SEO.jsx';
 
+const projectInquiryEmail = 'projects@djinfosys.com';
+const contactFormTimeoutMs = 15000;
 const contactFormEndpoint =
   import.meta.env.VITE_CONTACT_FORM_ENDPOINT?.startsWith('http')
     ? import.meta.env.VITE_CONTACT_FORM_ENDPOINT
@@ -143,14 +145,23 @@ export default function ContactPricing() {
     });
 
     try {
-      const response = await fetch(contactFormEndpoint, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), contactFormTimeoutMs);
+      let response;
+
+      try {
+        response = await fetch(contactFormEndpoint, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          signal: controller.signal,
+          body: JSON.stringify(payload),
+        });
+      } finally {
+        window.clearTimeout(timeoutId);
+      }
 
       if (!response.ok) {
         throw new Error(`Form submission failed with status ${response.status}`);
