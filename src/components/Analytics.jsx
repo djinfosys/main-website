@@ -1,10 +1,20 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+const defaultMeasurementId = 'G-7EJ588ECKJ';
+const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID || defaultMeasurementId;
+const analyticsHostnames = new Set(['djinfosys.com', 'www.djinfosys.com']);
+
+function shouldLoadAnalytics() {
+  if (!measurementId || typeof window === 'undefined') {
+    return false;
+  }
+
+  return analyticsHostnames.has(window.location.hostname);
+}
 
 export function trackConversion(eventName, params = {}) {
-  if (!measurementId || typeof window === 'undefined' || typeof window.gtag !== 'function') {
+  if (!shouldLoadAnalytics() || typeof window.gtag !== 'function') {
     return;
   }
 
@@ -15,7 +25,7 @@ export default function Analytics() {
   const location = useLocation();
 
   useEffect(() => {
-    if (!measurementId || typeof window === 'undefined') {
+    if (!shouldLoadAnalytics()) {
       return undefined;
     }
 
@@ -28,6 +38,7 @@ export default function Analytics() {
 
     const script = document.createElement('script');
     script.async = true;
+    script.dataset.cfasync = 'false';
     script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
     document.head.appendChild(script);
 
@@ -39,7 +50,7 @@ export default function Analytics() {
   }, []);
 
   useEffect(() => {
-    if (!measurementId || typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    if (!shouldLoadAnalytics() || typeof window.gtag !== 'function') {
       return;
     }
 
