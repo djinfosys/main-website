@@ -41,6 +41,8 @@ const routes = [
 const watchedResourceTypes = new Set(['script', 'stylesheet', 'image', 'font']);
 const canonicalOrigin = 'https://djinfosys.com';
 const capabilityStatementPath = '/documents/dj-information-systems-capability-statement.pdf';
+const externalAnalyticsUrlPattern =
+  /^https:\/\/(?:[^/]+\.)?(?:googletagmanager\.com|google-analytics\.com|analytics\.google\.com|g\.doubleclick\.net|tagassistant\.google\.com)\//;
 
 function expectedCanonicalUrl(path) {
   const cleanPath = path.split(/[?#]/)[0];
@@ -48,8 +50,17 @@ function expectedCanonicalUrl(path) {
   return `${canonicalOrigin}${normalizedPath}`;
 }
 
-function watchForProductionBreaks(page) {
+async function watchForProductionBreaks(page) {
   const problems = [];
+
+  await page.route(externalAnalyticsUrlPattern, async (route) => {
+    const resourceType = route.request().resourceType();
+    await route.fulfill({
+      status: resourceType === 'script' ? 200 : 204,
+      contentType: resourceType === 'script' ? 'application/javascript' : 'text/plain',
+      body: '',
+    });
+  });
 
   page.on('console', (message) => {
     if (message.type() === 'error') {
@@ -105,7 +116,7 @@ async function fillProjectBriefForm(page) {
 test.describe('production route smoke tests', () => {
   for (const route of routes) {
     test(`loads ${route.path} without blank screen or asset failures`, async ({ page }) => {
-      const problems = watchForProductionBreaks(page);
+      const problems = await watchForProductionBreaks(page);
       const response = await page.goto(route.path, { waitUntil: 'networkidle' });
 
       expect(response?.ok(), `${route.path} should return a successful response`).toBe(true);
@@ -130,7 +141,7 @@ test.describe('core navigation behavior', () => {
   });
 
   test('mobile menu opens and navigates to services', async ({ page }) => {
-    const problems = watchForProductionBreaks(page);
+    const problems = await watchForProductionBreaks(page);
 
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/', { waitUntil: 'networkidle' });
