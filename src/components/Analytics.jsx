@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const defaultMeasurementId = 'G-7EJ588ECKJ';
@@ -23,34 +23,15 @@ export function trackConversion(eventName, params = {}) {
 
 export default function Analytics() {
   const location = useLocation();
-
-  useEffect(() => {
-    if (!shouldLoadAnalytics()) {
-      return undefined;
-    }
-
-    window.dataLayer = window.dataLayer || [];
-    window.gtag =
-      window.gtag ||
-      function gtag() {
-        window.dataLayer.push(arguments);
-      };
-
-    const script = document.createElement('script');
-    script.async = true;
-    script.dataset.cfasync = 'false';
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`;
-    document.head.appendChild(script);
-
-    window.gtag('js', new Date());
-
-    return () => {
-      script.remove();
-    };
-  }, []);
+  const trackedInitialPageView = useRef(false);
 
   useEffect(() => {
     if (!shouldLoadAnalytics() || typeof window.gtag !== 'function') {
+      return;
+    }
+
+    if (!trackedInitialPageView.current) {
+      trackedInitialPageView.current = true;
       return;
     }
 
