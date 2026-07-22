@@ -20,10 +20,10 @@
     "react-router-dom": "latest"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
-    "@playwright/test": "^1.60.0",
-    "@vitejs/plugin-react": "^6.0.2",
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.61.1",
+    "@vitejs/plugin-react": "^6.0.3",
     "rollup": "npm:@rollup/wasm-node@^4.60.2",
-    "vite": "^8.0.13"
+    "vite": "^8.1.5"
   }
 }
