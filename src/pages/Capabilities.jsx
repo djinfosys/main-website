@@ -19,7 +19,8 @@ const identifiers = [
   { label: 'CAGE / NCAGE', value: '198F7' },
 ];
 
-const capabilityStatementUrl = '/documents/dj-information-systems-capability-statement.pdf';
+const capabilityStatementUrl =
+  '/documents/dj-information-systems-application-modernization-capability-statement-2026.pdf';
 
 const naicsCodes = [
   {
@@ -121,7 +122,7 @@ export default function Capabilities() {
               Request Capability Discussion
             </Link>
             <a className="button button-ghost-light" href={capabilityStatementUrl} target="_blank" rel="noreferrer">
-              Download Capability Statement
+              Download Capability Statement (2026)
             </a>
           </div>
         </div>
@@ -221,7 +222,7 @@ export default function Capabilities() {
           </div>
           <aside className="mission-card" aria-label="Capability document note">
             <FileText size={34} aria-hidden="true" />
-            <h2>Capability Statement</h2>
+            <h2>2026 Application Modernization Capability Statement</h2>
             <p>
               Download the formal one-page capability statement for procurement reviews, teaming conversations, NAICS
               alignment, representative experience context, and contact details.

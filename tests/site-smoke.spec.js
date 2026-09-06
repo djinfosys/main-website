@@ -40,7 +40,8 @@ const routes = [
 
 const watchedResourceTypes = new Set(['script', 'stylesheet', 'image', 'font']);
 const canonicalOrigin = 'https://djinfosys.com';
-const capabilityStatementPath = '/documents/dj-information-systems-capability-statement.pdf';
+const capabilityStatementPath =
+  '/documents/dj-information-systems-application-modernization-capability-statement-2026.pdf';
 const externalAnalyticsUrlPattern =
   /^https:\/\/(?:[^/]+\.)?(?:googletagmanager\.com|google-analytics\.com|analytics\.google\.com|g\.doubleclick\.net|tagassistant\.google\.com)\//;
 
