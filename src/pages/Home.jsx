@@ -101,7 +101,8 @@ const representativeLogos = [
   },
 ];
 
-const capabilityStatementUrl = '/documents/dj-information-systems-capability-statement.pdf';
+const capabilityStatementUrl =
+  '/documents/dj-information-systems-application-modernization-capability-statement-2026.pdf';
 
 export default function Home() {
   return (
@@ -230,10 +231,10 @@ export default function Home() {
           <div className="proof-grid">
             <article className="proof-card">
               <FileText size={25} aria-hidden="true" />
-              <h3>Capability statement</h3>
+              <h3>2026 capability statement</h3>
               <p>Download the one-page procurement profile with NAICS alignment, core competencies, and contact details.</p>
               <a href={capabilityStatementUrl} target="_blank" rel="noreferrer">
-                Download PDF
+                Download 2026 PDF
               </a>
             </article>
             <article className="proof-card">
